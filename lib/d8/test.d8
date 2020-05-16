@@ -2,11 +2,18 @@
 .subA
 
 label1:
-    LDB 102
-    JMP
-    HALT
-    JMP
+    LDA 5
+    STA 5 16
+    STA 1 4
 
+    LDA 6
+    STA 25 0
+    STA 25 1
+    STA 25 2
+    STA 25 3
+    LDA 7
+    STA 25 4
+    HALT
 
 .subB
     JMP

@@ -15,7 +15,7 @@ const HALT = 99
 let id = 0
 class CPU {
 
-    constructor() {
+    constructor(st) {
         this.name = 'cpu' + (++id)
         this.device = []
 
@@ -23,6 +23,14 @@ class CPU {
         this.time = 0
         this.last = 0
         this.fq = 1
+
+        this.A = 0
+        this.B = 0
+        this.X = 0
+        this.Y = 0
+        this.Z = 0
+
+        augment(this, st)
     }
 
     addDevice(dev) {
@@ -31,6 +39,49 @@ class CPU {
 
     powerUp() {
         this.device.forEach(d => d.powerUp())
+    }
+
+    exec(seg) {
+        let cp = 0
+        const len = seg.mem.length
+        while(cp < len) {
+            const op = seg.mem[cp++]
+
+            switch(op) {
+                case LDA:
+                    this.A = seg.mem[cp++]
+                    break
+
+                case LDB:
+                    this.B = seg.mem[cp++]
+                    break
+
+                case STA:
+                    this.capsule.store(
+                        seg.mem[cp++],
+                        seg.mem[cp++],
+                        this.A
+                    )
+                    break
+
+                case NOP:
+                case RET:
+                case HALT:
+                    return
+
+                default:
+                    log('skipping ' + op)
+            }
+        }
+    }
+
+    call(name) {
+        const seg = this.capsule.getSegment(name)
+        if (seg) {
+            this.exec(seg)
+        } else {
+            throw `can't find [${name}]`
+        }
     }
 
     next() {

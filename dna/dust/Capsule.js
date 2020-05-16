@@ -16,4 +16,12 @@ class Capsule {
     segmentAt(id) {
         return this.segment[id]
     }
+
+    getSegment(name) {
+        return this.map[name]
+    }
+
+    store(s, i, v) {
+        this.segment[s].mem[i] = v
+    }
 }

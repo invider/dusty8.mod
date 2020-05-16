@@ -13,4 +13,6 @@ function setup() {
     cpu.powerUp()
 
     lib.arch.d8(lib.d8.test, capsule)
+
+    cpu.call('subA')
 }
