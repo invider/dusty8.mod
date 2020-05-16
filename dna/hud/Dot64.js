@@ -4,8 +4,8 @@ const H = 64
 function Dot64(st) {
     this.x = 0
     this.y = 0
-    this.w = 256
-    this.h = 256
+    this.w = 512
+    this.h = 512
     augment(this, st)
 
     /*
@@ -38,17 +38,23 @@ Dot64.prototype.powerUp = function() {
     this.sh = ceil(H/Segment.SIDE)
 
     // create palette segment
-    this.capsule.addSegment(new Segment(Segment.PAL, 'palette'))
+    this.pal = this.capsule.addSegment(new Segment(Segment.PAL, 'palette'))
 
     // create video memory segments
     let vid = 0
     for (let sy = 0; sy < this.sh; sy++) {
         for (let sx = 0; sx < this.sw; sx++) {
-            this.capsule.addSegment(
+            const seg = this.capsule.addSegment(
                 new Segment(Segment.TILE, 'vid' + vid++)
             )
+            if (!this.seg) this.seg = seg
         }
     }
+
+    this.seg.mem[0] = 1
+    this.seg.mem[7] = 1
+    this.seg.mem[56] = 1
+    this.seg.mem[63] = 1
 
     this.createBuffer()
     this.x = rx(1) - this.w - 20
@@ -82,9 +88,15 @@ Dot64.prototype.draw = function() {
     save()
     translate(this.x, this.y)
 
+    // frame
+    stroke(.1, .5, .5)
+    lineWidth(2)
+    rect(0, 0, this.w, this.h)
+
     // render grid data
     const idata = this.bufContext.getImageData(0, 0, W, H)
 
+    /*
     for (let gy = 0; gy < H; gy++) {
         for (let gx = 0; gx < W; gx++) {
             //const t = this.space.get(this.gx + gx, this.gy + gy)
@@ -94,53 +106,48 @@ Dot64.prototype.draw = function() {
             idata.data[sh++] = RND(255)
             idata.data[sh++] = RND(255)
             idata.data[sh] = 255
-            /*
-            if (!t || t.type === this.space.token.NIL) {
-                idata.data[sh++] = 0
-                idata.data[sh++] = 0
-                idata.data[sh++] = 0
-                idata.data[sh] = 255
-            } else if (t.type === this.space.token.DOT) {
-                idata.data[sh++] = t.r
-                idata.data[sh++] = t.g
-                idata.data[sh++] = t.b
-                idata.data[sh] = 255
+        }
+    }
+    */
 
-            } else {
-                idata.data[sh++] = 255
-                idata.data[sh++] = 255
-                idata.data[sh++] = 255
-                idata.data[sh] = 255
+    const Segment = dna.dust.Segment
+    let vsegmentShift = this.seg.id
+    const nextLineShift = (W-Segment.SIDE) * 4
 
+    for (let sy = 0; sy < this.sh; sy++) {
+        for (let sx = 0; sx < this.sw; sx++) {
+            const baseX = sx * Segment.SIDE
+            const baseY = sy * Segment.SIDE
+            const seg = this.capsule.segmentAt( vsegmentShift++ )
+
+            let sh = (baseY * W + baseX) * 4
+            let column = 0
+            for (let i = 0; i < Segment.LENGTH; i++) {
+                const color = seg.mem[i]
+                if (column >= Segment.SIDE) {
+                    sh += nextLineShift
+                    column = 0
+                }
+
+                if (color) {
+                    idata.data[sh++] = 255
+                    idata.data[sh++] = 255
+                    idata.data[sh++] = 255
+                } else {
+                    idata.data[sh++] = 40
+                    idata.data[sh++] = 40
+                    idata.data[sh++] = 40
+                }
+                idata.data[sh++] = 255
+
+                column ++
             }
-            */
         }
     }
     this.bufContext.putImageData(idata, 0, 0)
 
     blocky()
     image(this.bufCanvas, 0, 0, this.w, this.h)
-
-    if (this.showPort) {
-        // highlight the port to the ghost view
-        const ds = this.w / this.gw
-        const vpx = this.ghostView.gx - this.gx
-        const vpy = this.ghostView.gy - this.gy
-        this.dotSize = ds
-
-        stroke(.1, 1, 1)
-        lineWidth(2)
-
-        const x = max(vpx*ds, 2)
-        const y = max(vpy*ds, 2)
-        const w = min(this.ghostView.gw * ds, this.w-x-2)
-        const h = min(this.ghostView.gh * ds, this.h-y-2)
-        rect(x, y, w, h)
-    }
-
-    stroke(.1, .5, .5)
-    lineWidth(2)
-    rect(0, 0, this.w, this.h)
 
     restore()
 }

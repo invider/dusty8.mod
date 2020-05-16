@@ -10,5 +10,10 @@ class Capsule {
         if (segment.name) {
             this.map[segment.name] = segment
         }
+        return segment
+    }
+
+    segmentAt(id) {
+        return this.segment[id]
     }
 }
