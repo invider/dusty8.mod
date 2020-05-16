@@ -11,6 +11,16 @@ const TYPE = {
     TILE: 12,
 }
 
+const KIND = {
+    NUMBER: 0,
+    CODE: 1,
+    PAL: 2,
+    COLOR: 3,
+
+    SEG: 11,
+    LINK: 12,
+}
+
 class Segment {
     constructor(type, name) {
         this.type = type || TYPE.DATA
@@ -23,18 +33,25 @@ class Segment {
 
         this.mem = []
         this.memt = []
+        this.marker = 0
 
         this.clear()
     }
 
     clear() {
-        for (let i = 0; i < this.length; i++) {
+        for (let i = 0; i < LENGTH; i++) {
             this.mem[i] = 0
             this.memt[i] = 0
         }
+    }
+
+    extend(v, t) {
+        this.mem[this.marker] = v || 0
+        this.memt[this.marker++] = t || 0
     }
 }
 
 Segment.SIDE = SIDE
 Segment.LENGTH = LENGTH
+Segment.KIND = KIND
 augment(Segment, TYPE)

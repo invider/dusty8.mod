@@ -10,6 +10,7 @@ function setup() {
             capsule: capsule,
         })
     )
-
     cpu.powerUp()
+
+    lib.arch.d8(lib.d8.test, capsule)
 }

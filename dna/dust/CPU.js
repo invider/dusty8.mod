@@ -1,6 +1,6 @@
 // @depends(lib/arch/op)
 
-const HALT = 0
+const NOP = 0
 const LDA = 1
 const LDB = 2
 const STA = 3
@@ -8,6 +8,9 @@ const STB = 4
 const JMP = 5
 const JMZ = 6
 const JNZ = 7
+
+const RET = 98
+const HALT = 99
 
 let id = 0
 class CPU {
@@ -45,7 +48,7 @@ class CPU {
 
 CPU.init = function() {
     lib.arch.op.defineOpCodes({
-        HALT,
+        NOP,
         LDA, 
         LDB,
         STA,
@@ -53,6 +56,9 @@ CPU.init = function() {
         JMP,
         JMZ,
         JNZ,
+
+        RET,
+        HALT,
     })
 }
 

@@ -77,20 +77,20 @@ Dot64.prototype.createBuffer = function() {
     this.bufContext = this.bufCanvas.getContext('2d')
 }
 
-Dot64.prototype.ghostX = function(x) {
-    return floor(x/this.w/W)
+Dot64.prototype.gx = function(x) {
+    return floor(x * (this.w/W)) + this.x
 }
 
-Dot64.prototype.ghostY = function(y) {
-    return floor(y/this.h/H)
+Dot64.prototype.gy = function(y) {
+    return floor(y * (this.h/H)) + this.y
 }
 
-Dot64.prototype.viewX = function(gx) {
-    return gx * this.w/W
+Dot64.prototype.lx = function(gx) {
+    return floor((gx-this.x) / (this.w/W))
 }
 
-Dot64.prototype.viewY = function(gy) {
-    return gy * thsi.h/H
+Dot64.prototype.ly = function(gy) {
+    return floor((gy-this.y) / (this.h/H))
 }
 
 Dot64.prototype.draw = function() {

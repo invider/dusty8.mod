@@ -1,0 +1,14 @@
+
+.subA
+
+label1:
+    LDB 102
+    JMP
+    HALT
+    JMP
+
+
+.subB
+    JMP
+    JMP
+    RET
