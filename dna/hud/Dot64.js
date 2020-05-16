@@ -39,6 +39,15 @@ Dot64.prototype.powerUp = function() {
 
     // create palette segment
     this.pal = this.capsule.addSegment(new Segment(Segment.PAL, 'palette'))
+    this.pal.mem[0] = 0x000000
+    this.pal.mem[1] = 0xffffff
+    this.pal.mem[2] = 0xff0000
+    this.pal.mem[3] = 0x00ff00
+    this.pal.mem[4] = 0x0000ff
+    this.pal.mem[5] = 0xff00ff
+    this.pal.mem[6] = 0x00ffff
+    this.pal.mem[6] = 0xffff00
+    this.pal.mem[7] = 0x808080
 
     // create video memory segments
     let vid = 0
@@ -52,9 +61,9 @@ Dot64.prototype.powerUp = function() {
     }
 
     this.seg.mem[0] = 1
-    this.seg.mem[7] = 1
-    this.seg.mem[56] = 1
-    this.seg.mem[63] = 1
+    this.seg.mem[7] = 2
+    this.seg.mem[56] = 3
+    this.seg.mem[63] = 4
 
     this.createBuffer()
     this.x = rx(1) - this.w - 20
@@ -123,21 +132,17 @@ Dot64.prototype.draw = function() {
             let sh = (baseY * W + baseX) * 4
             let column = 0
             for (let i = 0; i < Segment.LENGTH; i++) {
-                const color = seg.mem[i]
+                const icolor = seg.mem[i]
+                const color = this.pal.mem[icolor] || 0
+
                 if (column >= Segment.SIDE) {
                     sh += nextLineShift
                     column = 0
                 }
 
-                if (color) {
-                    idata.data[sh++] = 255
-                    idata.data[sh++] = 255
-                    idata.data[sh++] = 255
-                } else {
-                    idata.data[sh++] = 40
-                    idata.data[sh++] = 40
-                    idata.data[sh++] = 40
-                }
+                idata.data[sh++] = (color & 0xff0000) >> 16
+                idata.data[sh++] = (color & 0xff00) >> 8
+                idata.data[sh++] = (color & 0xff)
                 idata.data[sh++] = 255
 
                 column ++
