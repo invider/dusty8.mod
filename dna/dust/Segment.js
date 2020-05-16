@@ -1,4 +1,5 @@
-const LENGTH = 64
+const SIDE = 8
+const LENGTH = SIDE*SIDE
 const MAX_NAME_LENGTH = 8
 
 const TYPE = {
@@ -13,14 +14,15 @@ const TYPE = {
 class Segment {
     constructor(type, name) {
         this.type = type || TYPE.DATA
+
         this.name = name || ''
+        // normalize name
         if (this.name.length > MAX_NAME_LENGTH) {
             this.name = this.name.substring(MAX_NAME_LENGTH)
         }
 
         this.mem = []
         this.memt = []
-        this.length = LENGTH
 
         this.clear()
     }
@@ -32,4 +34,7 @@ class Segment {
         }
     }
 }
+
+Segment.SIDE = SIDE
+Segment.LENGTH = LENGTH
 augment(Segment, TYPE)

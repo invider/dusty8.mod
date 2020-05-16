@@ -14,11 +14,20 @@ class CPU {
 
     constructor() {
         this.name = 'cpu' + (++id)
+        this.device = []
 
         this.cycles = 0
         this.time = 0
         this.last = 0
         this.fq = 1
+    }
+
+    addDevice(dev) {
+        this.device.push(dev)
+    }
+
+    powerUp() {
+        this.device.forEach(d => d.powerUp())
     }
 
     next() {
