@@ -32,6 +32,13 @@ function Dot64(st) {
     */
 }
 
+Dot64.prototype.adjust = function() {
+    this.w = 512
+    this.h = 512
+    this.x = rx(1) - this.w - 20
+    this.y = 20
+}
+
 Dot64.prototype.powerUp = function() {
     const Segment = dna.dust.Segment
     this.sw = ceil(W/Segment.SIDE)
@@ -66,8 +73,7 @@ Dot64.prototype.powerUp = function() {
     this.seg.mem[63] = 4
 
     this.createBuffer()
-    this.x = rx(1) - this.w - 20
-    this.y = 20
+    this.adjust()
 }
 
 Dot64.prototype.createBuffer = function() {
@@ -158,7 +164,9 @@ Dot64.prototype.draw = function() {
 }
 
 Dot64.prototype.onClick = function(x, y, e) {
+    /*
     const gx = this.ghostX(x)
     const gy = this.ghostY(y)
     this.ghostView.centerAt(gx, gy)
+    */
 }

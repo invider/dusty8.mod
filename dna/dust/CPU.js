@@ -24,6 +24,11 @@ class CPU {
         this.last = 0
         this.fq = 1
 
+        this.code = null
+        this.dstack = null
+        this.rstack = null
+
+
         this.A = 0
         this.B = 0
         this.X = 0
@@ -39,6 +44,10 @@ class CPU {
 
     powerUp() {
         this.device.forEach(d => d.powerUp())
+    }
+
+    next() {
+        this.cycles ++
     }
 
     exec(seg) {
@@ -82,10 +91,6 @@ class CPU {
         } else {
             throw `can't find [${name}]`
         }
-    }
-
-    next() {
-        this.cycles ++
     }
 
     evo(dt) {
