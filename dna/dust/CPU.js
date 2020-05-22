@@ -24,16 +24,17 @@ class CPU {
         this.last = 0
         this.fq = 1
 
-        this.code = null
-        this.dstack = null
-        this.rstack = null
-
-
         this.A = 0
         this.B = 0
-        this.X = 0
-        this.Y = 0
-        this.Z = 0
+        this.I = 0
+
+        this.C = 0
+        this.D = 0
+        this.R = 0
+
+        this.CS = null
+        this.DS = null
+        this.RS = null
 
         augment(this, st)
     }
@@ -47,41 +48,43 @@ class CPU {
     }
 
     next() {
+        if (this.C >= 64) return
+
         this.cycles ++
+        const CS = this.CS
+
+        const op = CS.mem[this.C++]
+
+        switch(op) {
+            case LDA:
+                this.A = CS.mem[this.C++]
+                break
+
+            case LDB:
+                this.B = CS.mem[this.C++]
+                break
+
+            case STA:
+                this.capsule.store(
+                    CS.mem[this.C++],
+                    CS.mem[this.C++],
+                    this.A
+                )
+                break
+
+            case NOP:
+            case RET:
+            case HALT:
+                return
+
+            default:
+                log('skipping ' + op)
+        }
     }
 
     exec(seg) {
-        let cp = 0
-        const len = seg.mem.length
-        while(cp < len) {
-            const op = seg.mem[cp++]
-
-            switch(op) {
-                case LDA:
-                    this.A = seg.mem[cp++]
-                    break
-
-                case LDB:
-                    this.B = seg.mem[cp++]
-                    break
-
-                case STA:
-                    this.capsule.store(
-                        seg.mem[cp++],
-                        seg.mem[cp++],
-                        this.A
-                    )
-                    break
-
-                case NOP:
-                case RET:
-                case HALT:
-                    return
-
-                default:
-                    log('skipping ' + op)
-            }
-        }
+        this.C = 0
+        this.CS = seg
     }
 
     call(name) {

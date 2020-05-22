@@ -23,6 +23,7 @@ const KIND = {
 
 class Segment {
     constructor(type, name) {
+        this.id = 0
         this.type = type || TYPE.DATA
 
         this.name = name || ''
@@ -45,7 +46,11 @@ class Segment {
         }
     }
 
-    extend(v, t) {
+    flush(v, t) {
+        if (this.marker === LENGTH) {
+            throw 'overflush at #'
+                + `${this.id}[${this.name}]`
+        }
         this.mem[this.marker] = v || 0
         this.memt[this.marker++] = t || 0
     }

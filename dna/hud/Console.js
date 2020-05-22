@@ -13,8 +13,9 @@ const df = {
     h: 100,
 
     //font: '24px moon',
-    //font: '24px pixel-operator',
-    font: '20px pixel-operator-mono8',
+    //font: '20px pixel-operator-mono8',
+    //font: '28px pixel-operator',
+    font: '24px coolville',
     pane: '#202020',
     content: '#10c050',
 }
