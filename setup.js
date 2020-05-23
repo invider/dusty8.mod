@@ -23,6 +23,15 @@ function setup() {
     })
     cpu.addDevice(con)
 
+    const dustyMonitor = lab.hud.spawn(
+        dna.hud.DustyMonitor, {
+            x: 20,
+            y: 100,
+            w: 300,
+            h: 250,
+            cpu: cpu,
+        }
+    )
 
     cpu.powerUp()
 

@@ -5,5 +5,5 @@ function draw() {
     font('32px moon')
     alignLeft()
     baseTop()
-    text('#' + lab.cpu1.cycles, 20, 20)
+    text('#' + lab.cpu1.Y, 20, 20)
 }

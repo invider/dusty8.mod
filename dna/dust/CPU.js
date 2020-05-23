@@ -19,22 +19,25 @@ class CPU {
         this.name = 'cpu' + (++id)
         this.device = []
 
-        this.cycles = 0
         this.time = 0
         this.last = 0
-        this.fq = 1
 
         this.A = 0
         this.B = 0
         this.I = 0
 
+        this.Q = 1 // frequency
+        this.Y = 0 // cycles counter
         this.C = 0
         this.D = 0
         this.R = 0
 
-        this.CS = null
-        this.DS = null
-        this.RS = null
+        const Segment = dna.dust.Segment
+        this.CS = new Segment(Segment.CODE, 'nocode')
+        this.DS = new Segment(Segment.DATA, 'datastack')
+        this.RS = new Segment(Segment.DATA, 'retstack')
+
+        this.FS = true
 
         augment(this, st)
     }
@@ -48,9 +51,9 @@ class CPU {
     }
 
     next() {
-        if (this.C >= 64) return
+        if (this.FS) return
 
-        this.cycles ++
+        this.Y ++
         const CS = this.CS
 
         const op = CS.mem[this.C++]
@@ -75,16 +78,19 @@ class CPU {
             case NOP:
             case RET:
             case HALT:
-                return
+                this.FS = true
+                break
 
             default:
-                log('skipping ' + op)
+                log('found unknown op: ' + op)
+                this.FS = true
         }
     }
 
     exec(seg) {
         this.C = 0
         this.CS = seg
+        this.FS = false
     }
 
     call(name) {
@@ -98,7 +104,7 @@ class CPU {
 
     evo(dt) {
         this.time += dt
-        if (this.time >= this.last + this.fq) {
+        if (this.time >= this.last + this.Q) {
             this.next()
             this.last = this.time
         }
