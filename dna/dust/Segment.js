@@ -54,6 +54,17 @@ class Segment {
         this.mem[this.marker] = v || 0
         this.memt[this.marker++] = t || 0
     }
+
+    getType() {
+        switch(this.type) {
+            case TYPE.DATA: return 'data';
+            case TYPE.CODE: return 'code';
+            case TYPE.IO: return 'io';
+            case TYPE.BUFFER: return 'buffer';
+            case TYPE.PAL: return 'palette';
+            case TYPE.TILE: return 'tile';
+        }
+    }
 }
 
 Segment.SIDE = SIDE

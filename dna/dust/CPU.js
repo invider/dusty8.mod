@@ -22,22 +22,23 @@ class CPU {
         this.time = 0
         this.last = 0
 
-        this.A = 0
-        this.B = 0
-        this.I = 0
+        this.A = 0 // accumulator register
+        this.B = 0 // operand register
+        this.I = 0 // index register
 
         this.Q = 1 // frequency
         this.Y = 0 // cycles counter
-        this.C = 0
-        this.D = 0
-        this.R = 0
+        this.C = 0 // command pointer
+        this.D = 0 // data stack pointer
+        this.R = 0 // return stack pointer
 
+        // create code, data stack and return stack segments
         const Segment = dna.dust.Segment
         this.CS = new Segment(Segment.CODE, 'nocode')
         this.DS = new Segment(Segment.DATA, 'datastack')
         this.RS = new Segment(Segment.DATA, 'retstack')
 
-        this.FS = true
+        this.FS = true // stop execution flag
 
         augment(this, st)
     }

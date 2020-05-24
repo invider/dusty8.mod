@@ -33,6 +33,17 @@ function setup() {
         }
     )
 
+    const coreMonitor = lab.hud.spawn(
+        dna.hud.CoreMonitor, {
+            x: 20,
+            y: 450,
+            w: 450,
+            h: 300,
+            cpu: cpu,
+            capsule: capsule,
+        }
+    )
+
     cpu.powerUp()
 
     lib.arch.d8(lib.d8.test, capsule)
