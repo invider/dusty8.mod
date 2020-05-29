@@ -1,3 +1,5 @@
+const JUMP = 8
+
 class CoreMonitor extends dna.hud.Container {
 
     constructor(st) {
@@ -5,18 +7,7 @@ class CoreMonitor extends dna.hud.Container {
         this.segmentId = 0
     }
 
-    drawContent() {
-        const seg = this.capsule.segmentAt(this.segmentId)
-
-        fill(env.style.content)
-        font('16px moon')
-        alignLeft()
-        baseTop()
-
-        const title = '#' + seg.id + '['
-            + seg.name + ']: ' + seg.getType()
-        text(title, 10, 10)
-
+    drawData(seg) {
         const S = 8
         const bx = 10
         const by = 40
@@ -33,6 +24,54 @@ class CoreMonitor extends dna.hud.Container {
         }
     }
 
+    drawGrid(seg) {
+        const S = 8
+        const bx = 10
+        const by = 40
+        const dx = 25
+        const dy = 25
+
+        let p = 0
+        for (let i = 0; i < S; i++) {
+            for (let j = 0; j < S; j++) {
+                const v = seg.mem[i*S + j]
+                if (v !== undefined) {
+                    const c = '#' + lib.util.hexColor(v)
+                    fill(c)
+
+                    const x = bx + j*dx
+                    const y = by + i*dy
+                    rect(x, y, 16, 16)
+                }
+            }
+        }
+
+    }
+
+    drawContent() {
+        const Segment = dna.dust.Segment
+        const seg = this.capsule.segmentAt(this.segmentId)
+
+        // title
+        fill(env.style.content)
+        font('16px moon')
+        alignLeft()
+        baseTop()
+
+        const title = '#' + seg.id + '['
+            + seg.name + ']: ' + seg.getType()
+        text(title, 10, 10)
+
+        // data
+        switch(seg.type) {
+            case Segment.PAL:
+                this.drawGrid(seg)
+                break
+            default:
+                this.drawData(seg)
+        }
+    }
+
     drawBackground() {
         fill('#151520')
         rect(0, 0, this.w, this.h)
@@ -45,15 +84,15 @@ class CoreMonitor extends dna.hud.Container {
 
     onFocus() {}
 
-    prevSegment() {
-        if (this.segmentId === 0) {
-            this.segmentId = this.capsule.segment.length
+    prevSegment(n) {
+        this.segmentId -= n
+        if (this.segmentId < 0) {
+            this.segmentId = this.capsule.segment.length - 1
         }
-        this.segmentId --
     }
 
-    nextSegment() {
-        this.segmentId ++
+    nextSegment(n) {
+        this.segmentId += n
         if (this.segmentId >= this.capsule.segment.length) {
             this.segmentId = 0
         }
@@ -74,8 +113,18 @@ class CoreMonitor extends dna.hud.Container {
     onKeyDown(e) {
 
         switch(e.code) {
-            case 'ArrowLeft': this.prevSegment(); break;
-            case 'ArrowRight': this.nextSegment(); break;
+            case 'ArrowUp':
+                this.nextSegment(1)
+                break;
+            case 'ArrowDown':
+                this.prevSegment(1)
+                break
+            case 'ArrowLeft':
+                this.prevSegment(JUMP)
+                break
+            case 'ArrowRight':
+                this.nextSegment(JUMP)
+                break
             case 'Home': this.firstSegment(); break;
             case 'End': this.lastSegment(); break;
             case 'Insert': this.codeSegment(); break;

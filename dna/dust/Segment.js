@@ -36,7 +36,7 @@ class Segment {
         this.memt = []
         this.marker = 0
 
-        this.clear()
+        //this.clear()
     }
 
     clear() {
