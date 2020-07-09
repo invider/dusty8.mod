@@ -9,6 +9,12 @@ const JMP = 5
 const JMZ = 6
 const JNZ = 7
 
+const ADD = 10
+const SUB = 11
+const MUL = 12
+const DIV = 13
+const MOD = 14
+
 const RET = 98
 const HALT = 99
 
@@ -76,6 +82,26 @@ class CPU {
                 )
                 break
 
+            case ADD:
+                this.A = this.A + this.B
+                break
+
+            case SUB:
+                this.A = this.A - this.B
+                break
+
+            case MUL:
+                this.A = this.A * this.B
+                break
+
+            case DIV:
+                this.A = (this.A / this.B) | 0
+                break
+
+            case MOD:
+                this.A = this.A % this.B
+                break
+
             case NOP:
             case RET:
             case HALT:
@@ -122,6 +148,12 @@ CPU.init = function() {
         JMP,
         JMZ,
         JNZ,
+
+        ADD,
+        SUB,
+        MUL,
+        DIV,
+        MOD,
 
         RET,
         HALT,

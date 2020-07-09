@@ -10,7 +10,11 @@ label1:
     STA 25 1
     STA 25 2
     STA 25 3
+
     LDA 7
+    LDB 10
+    ADD
+
     STA 25 4
     HALT
 
