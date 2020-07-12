@@ -150,6 +150,7 @@ class CPU {
                 )
                 break
 
+            // math ops
             case ADD:
                 this.A = this.A + this.B
                 break
@@ -194,6 +195,7 @@ class CPU {
                 this.A --
                 break
 
+            // bitwise ops
             case OR:
                 this.A = (this.A | this.B)
                 break
@@ -259,6 +261,15 @@ class CPU {
                 this.A = this.A > 0? 1 : 0
                 break
 
+            case LEZ:
+                this.A = this.A <= 0? 1 : 0
+                break
+
+            case GEZ:
+                this.A = this.A >= 0? 1 : 0
+                break
+
+            // system execution
             case NOP:
                 // do nothing...
                 break
@@ -328,6 +339,7 @@ CPU.init = function() {
         PUSH,
         POPR,
         PUSHR,
+
         LDA,
         LDB,
         STA,
@@ -337,6 +349,7 @@ CPU.init = function() {
         JNZ,
         CALL,
         RET,
+
         ADD,
         SUB,
         MUL,
@@ -348,6 +361,7 @@ CPU.init = function() {
         ABS,
         INC,
         DEC,
+
         OR,
         AND,
         NOT,
@@ -355,6 +369,7 @@ CPU.init = function() {
         SHL,
         SHR,
         SAR,
+
         ZERO,
         EQ,
         NEQ,
@@ -366,6 +381,7 @@ CPU.init = function() {
         GTZ,
         LEZ,
         GEZ,
+
         WAIT,
         HALT,
     })
