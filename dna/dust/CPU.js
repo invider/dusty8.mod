@@ -14,6 +14,12 @@ const SUB = 11
 const MUL = 12
 const DIV = 13
 const MOD = 14
+const POW = 15
+const SQRT = 16
+const NEG = 17
+const ABS = 18
+const INC = 19
+const DEC = 20
 
 const RET = 91
 const WAIT = 98
@@ -108,7 +114,34 @@ class CPU {
                 this.A = this.A % this.B
                 break
 
+            case POW:
+                this.A = Math.pow(this.A, this.B)
+                break
+
+            case SQRT:
+                this.A = Math.sqrt(this.A) | 0
+                break
+
+            case NEG:
+                this.A = -this.A
+                break
+
+            case ABS:
+                this.A = Math.abs(this.A)
+                break
+
+            case INC:
+                this.A ++
+                break
+
+            case  DEC:
+                this.A --
+                break
+
             case NOP:
+                // do nothing...
+                break
+
             case RET:
             case HALT:
                 this.HALT = true
@@ -160,8 +193,15 @@ CPU.init = function() {
         MUL,
         DIV,
         MOD,
+        POW,
+        SQRT,
+        NEG,
+        ABS,
+        INC,
+        DEC,
 
         RET,
+        WAIT,
         HALT,
     })
 }
