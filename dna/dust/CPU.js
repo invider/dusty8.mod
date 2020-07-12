@@ -75,6 +75,8 @@ const GT   = 75
 const GTQ  = 76
 const LTZ  = 77
 const GTZ  = 78
+const LEZ  = 79
+const GEZ  = 80
 
 const WAIT = 98
 const HALT = 99
@@ -188,7 +190,7 @@ class CPU {
                 this.A ++
                 break
 
-            case  DEC:
+            case DEC:
                 this.A --
                 break
 
@@ -220,11 +222,47 @@ class CPU {
                 this.A = this.A >>> this.B
                 break
 
+            // logic
+            case ZERO:
+                this.A = this.A === 0? 1 : 0
+                break
+
+            case EQ:
+                this.A = this.A === this.B? 1 : 0
+                break
+
+            case NEQ:
+                this.A = this.A !== this.B? 1 : 0
+                break
+
+            case LT:
+                this.A = this.A < this.B? 1 : 0
+                break
+
+            case LTQ:
+                this.A = this.A <= this.B? 1 : 0
+                break
+
+            case GT:
+                this.A = this.A > this.B? 1 : 0
+                break
+
+            case GTQ:
+                this.A = this.A >= this.B? 1 : 0
+                break
+
+            case LTZ:
+                this.A = this.A < 0? 1 : 0
+                break
+
+            case GTZ:
+                this.A = this.A > 0? 1 : 0
+                break
+
             case NOP:
                 // do nothing...
                 break
 
-            case RET:
             case HALT:
                 this.HALT = true
                 break
@@ -326,6 +364,8 @@ CPU.init = function() {
         GTQ,
         LTZ,
         GTZ,
+        LEZ,
+        GEZ,
         WAIT,
         HALT,
     })
