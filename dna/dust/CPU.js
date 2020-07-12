@@ -1,27 +1,81 @@
 // @depends(lib/arch/op)
 
 const NOP = 0
-const LDA = 1
-const LDB = 2
-const STA = 3
-const STB = 4
-const JMP = 5
-const JMZ = 6
-const JNZ = 7
 
-const ADD = 10
-const SUB = 11
-const MUL = 12
-const DIV = 13
-const MOD = 14
-const POW = 15
-const SQRT = 16
-const NEG = 17
-const ABS = 18
-const INC = 19
-const DEC = 20
+// registers manipulation
+const MOVAB  = 1
+const MOVAX  = 2
+const MOVAT  = 3
+const MOVAR  = 4
+const MOVADS = 5
+const MOVATS = 6
+const MOVARS = 7
+const MOVAQ  = 8
+const MOVAY  = 9
 
-const RET = 91
+const MOVBA  = 10
+const MOVXA  = 11
+const MOVTA  = 12
+const MOVRA  = 13
+const MOVDSA = 14
+const MOVTSA = 15
+const MOVRSA = 16
+const MOVQA  = 17
+const MOVYA  = 18
+
+const MOVBX  = 19
+const MOVXB  = 20
+
+const SWAPAB = 21
+const SWAPAX = 22
+const SWAPBX = 23
+
+// memory
+const POP   = 30
+const PEEK  = 31
+const PUSH  = 32
+const POPR  = 33
+const PUSHR = 34
+const LDA   = 35
+const LDB   = 36
+const STA   = 37
+const STB   = 38
+
+const JMP  = 40
+const JZ   = 41
+const JNZ  = 42
+const CALL = 43
+const RET  = 44
+
+const ADD  = 50
+const SUB  = 51
+const MUL  = 52
+const DIV  = 53
+const MOD  = 54
+const POW  = 55
+const SQRT = 56
+const NEG  = 57
+const ABS  = 58
+const INC  = 59
+const DEC  = 60
+const OR   = 61
+const AND  = 62
+const NOT  = 63
+const XOR  = 64
+const SHL  = 65
+const SHR  = 66
+const SAR  = 67
+
+const ZERO = 70
+const EQ   = 71
+const NEQ  = 72
+const LT   = 73
+const LTQ  = 74
+const GT   = 75
+const GTQ  = 76
+const LTZ  = 77
+const GTZ  = 78
+
 const WAIT = 98
 const HALT = 99
 
@@ -138,6 +192,34 @@ class CPU {
                 this.A --
                 break
 
+            case OR:
+                this.A = (this.A | this.B)
+                break
+
+            case AND:
+                this.A = (this.A & this.B)
+                break
+
+            case NOT:
+                this.A = (~this.A)
+                break
+
+            case XOR:
+                this.A = (this.A ^ this.B)
+                break
+
+            case SHL:
+                this.A = this.A << this.B
+                break
+
+            case SHR:
+                this.A = this.A >> this.B
+                break
+
+            case SAR:
+                this.A = this.A >>> this.B
+                break
+
             case NOP:
                 // do nothing...
                 break
@@ -180,14 +262,43 @@ class CPU {
 CPU.init = function() {
     lib.arch.op.defineOpCodes({
         NOP,
-        LDA, 
+        MOVAB,
+        MOVAX,
+        MOVAT,
+        MOVAR,
+        MOVADS,
+        MOVATS,
+        MOVARS,
+        MOVAQ,
+        MOVAY,
+        MOVBA,
+        MOVXA,
+        MOVTA,
+        MOVRA,
+        MOVDSA,
+        MOVTSA,
+        MOVRSA,
+        MOVQA,
+        MOVYA,
+        MOVBX,
+        MOVXB,
+        SWAPAB,
+        SWAPAX,
+        SWAPBX,
+        POP,
+        PEEK,
+        PUSH,
+        POPR,
+        PUSHR,
+        LDA,
         LDB,
         STA,
         STB,
         JMP,
-        JMZ,
+        JZ,
         JNZ,
-
+        CALL,
+        RET,
         ADD,
         SUB,
         MUL,
@@ -199,10 +310,23 @@ CPU.init = function() {
         ABS,
         INC,
         DEC,
-
-        RET,
+        OR,
+        AND,
+        NOT,
+        XOR,
+        SHL,
+        SHR,
+        SAR,
+        ZERO,
+        EQ,
+        NEQ,
+        LT,
+        LTQ,
+        GT,
+        GTQ,
+        LTZ,
+        GTZ,
         WAIT,
         HALT,
     })
 }
-
