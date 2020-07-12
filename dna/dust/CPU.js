@@ -30,17 +30,18 @@ const SWAPAB = 21
 const SWAPAX = 22
 const SWAPBX = 23
 
-// memory
+// stack ops
 const POP   = 30
 const PEEK  = 31
 const PUSH  = 32
-const POPR  = 33
-const PUSHR = 34
-const LDA   = 35
-const LDB   = 36
-const STA   = 37
-const STB   = 38
 
+// memory
+const LDA   = 33
+const LDB   = 34
+const STA   = 35
+const STB   = 36
+
+// flow control
 const JMP  = 40
 const JZ   = 41
 const JNZ  = 42
@@ -85,6 +86,8 @@ let id = 0
 class CPU {
 
     constructor(st) {
+        augment(this, st)
+
         this.name = 'cpu' + (++id)
         this.device = []
 
@@ -96,25 +99,29 @@ class CPU {
         this.B = 0 // operand register
         this.X = 0 // index register
 
+        const Segment = dna.dust.Segment
+        this.segmentLength = Segment.LENGTH
+
         // pointer registers - shift within a segment
         this.C = 0 // command pointer
-        this.T = 0 // data stack pointer
-        this.R = 0 // return stack pointer
+        this.T = this.segmentLength - 1 // data stack pointer
+        this.R = this.segmentLength - 1 // return stack pointer
 
         // create code, data stack and return stack segments
-        const Segment = dna.dust.Segment
         this.CS = new Segment(Segment.CODE, 'nocode')
+        this.capsule.addSegment(this.CS)
         this.DS = new Segment(Segment.DATA, 'data')
+        this.capsule.addSegment(this.DS)
         this.TS = new Segment(Segment.DATA, 'data stack')
+        this.capsule.addSegment(this.TS)
         this.RS = new Segment(Segment.DATA, 'call stack')
+        this.capsule.addSegment(this.RS)
 
         // special registers
         this.Q = 1 // frequency
         this.Y = 0 // cycles counter
 
         this.HALT = true // stop execution flag
-
-        augment(this, st)
     }
 
     addDevice(dev) {
@@ -129,25 +136,45 @@ class CPU {
         if (this.HALT) return
 
         this.Y ++
-        const CS = this.CS
 
-        const op = CS.mem[this.C++]
+        const op = this.CS.mem[this.C++]
 
         switch(op) {
             case LDA:
-                this.A = CS.mem[this.C++]
+                this.A = this.CS.mem[this.C++]
                 break
 
             case LDB:
-                this.B = CS.mem[this.C++]
+                this.B = this.CS.mem[this.C++]
                 break
 
             case STA:
                 this.capsule.store(
-                    CS.mem[this.C++],
-                    CS.mem[this.C++],
+                    this.CS.mem[this.C++],
+                    this.CS.mem[this.C++],
                     this.A
                 )
+                break
+
+            // stack ops
+            case POP:
+                if (this.T >= this.segmentLength - 1) {
+                    throw 'stack is empty'
+                }
+                this.A = this.TS.mem[++this.T]
+                break
+
+            case PEEK:
+                const i = this.T + this.A
+                if (i < 0 || i > this.segmentLength - 1) {
+                    throw `index is out of range [${i}]`
+                }
+                this.A = this.TS.mem[i]
+                break
+
+            case PUSH:
+                if (this.T < 0) throw 'stack overflow'
+                this.TS.mem[this.T--] = this.A
                 break
 
             // math ops
@@ -311,6 +338,7 @@ class CPU {
 CPU.init = function() {
     lib.arch.op.defineOpCodes({
         NOP,
+
         MOVAB,
         MOVAX,
         MOVAT,
@@ -334,11 +362,10 @@ CPU.init = function() {
         SWAPAB,
         SWAPAX,
         SWAPBX,
+
         POP,
         PEEK,
         PUSH,
-        POPR,
-        PUSHR,
 
         LDA,
         LDB,

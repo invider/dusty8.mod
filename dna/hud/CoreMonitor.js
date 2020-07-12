@@ -114,16 +114,16 @@ class CoreMonitor extends dna.hud.Container {
 
         switch(e.code) {
             case 'ArrowUp':
-                this.nextSegment(1)
+                this.nextSegment(JUMP)
                 break;
             case 'ArrowDown':
-                this.prevSegment(1)
-                break
-            case 'ArrowLeft':
                 this.prevSegment(JUMP)
                 break
+            case 'ArrowLeft':
+                this.prevSegment(1)
+                break
             case 'ArrowRight':
-                this.nextSegment(JUMP)
+                this.nextSegment(1)
                 break
             case 'Home': this.firstSegment(); break;
             case 'End': this.lastSegment(); break;

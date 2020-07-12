@@ -36,7 +36,7 @@ function setup() {
     const coreMonitor = lab.hud.spawn(
         dna.hud.CoreMonitor, {
             x: 20,
-            y: 300,
+            y: 290,
             w: 450,
             h: 250,
             cpu: cpu,
@@ -47,7 +47,7 @@ function setup() {
     const coreMonitor2 = lab.hud.spawn(
         dna.hud.CoreMonitor, {
             x: 20,
-            y: 570,
+            y: 560,
             w: 450,
             h: 250,
             cpu: cpu,

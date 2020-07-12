@@ -15,14 +15,10 @@ label1:
     LDB 10
     ADD
 
-    LDA 10
-    LDB 5
-    DIV
-    STA 1 1
-    STA 1 2
-    STA 25 4
-    LDB 4
-    POW
+    lda 101
+    push
+    lda 100
+    pop
 
     STA 25 4
     HALT

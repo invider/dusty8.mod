@@ -62,12 +62,18 @@ Dusty 8 SE - a stack-based VM
 - Y - cycles counter
 
 
+
 ## Addressing
 
 * [segment #][6-bit in-segment shift]?
 * [segment #][0-100 in-segment shift]?
 
 Segments can be addressed individually by #.
+
+In the assembly, the labels are resolved as:
+
+* a segment name => segment #
+* a line label => local shift
 
 Each subroutine occupies it's own segment.
 
@@ -79,18 +85,22 @@ Each subroutine occupies it's own segment.
 - HALT - stop execution
 - WAIT - wait for external interrupt
 
-#### memory
+#### stack manipulation
 - POP  - pop value to A
 - PEEK - peek a value at TS:T + X -> A
 - PUSH - push A on stack
 - POPR - pop A value from call stack
 - PUSHR - push A value to call stack
+
+#### memory access
 - LDA - load A from data segment @X
 - LDB - load B from data segment @X
 - STA - store A to data segment @X
 - STB - store B to data segment @X
 - AT  - load value at A:X
 - SET - set value at A:X to B
+
+#### register manipulation
 - MOV A -> B, X, T, R, DS, TS, RS, Q, Y
 - MOV A <- B, X, T, R, DS, TS, RS, Q, Y
 - MOV B -> X
@@ -134,4 +144,6 @@ Each subroutine occupies it's own segment.
 - GTQ
 - LTZ
 - GTZ
+- LEZ
+- GEZ
 
