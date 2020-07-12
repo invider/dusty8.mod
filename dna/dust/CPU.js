@@ -15,7 +15,8 @@ const MUL = 12
 const DIV = 13
 const MOD = 14
 
-const RET = 98
+const RET = 91
+const WAIT = 98
 const HALT = 99
 
 let id = 0
@@ -28,23 +29,28 @@ class CPU {
         this.time = 0
         this.last = 0
 
+        // general-purpose registers
         this.A = 0 // accumulator register
         this.B = 0 // operand register
-        this.I = 0 // index register
+        this.X = 0 // index register
 
-        this.Q = 1 // frequency
-        this.Y = 0 // cycles counter
+        // pointer registers - shift within a segment
         this.C = 0 // command pointer
-        this.D = 0 // data stack pointer
+        this.T = 0 // data stack pointer
         this.R = 0 // return stack pointer
 
         // create code, data stack and return stack segments
         const Segment = dna.dust.Segment
         this.CS = new Segment(Segment.CODE, 'nocode')
-        this.DS = new Segment(Segment.DATA, 'datastack')
-        this.RS = new Segment(Segment.DATA, 'retstack')
+        this.DS = new Segment(Segment.DATA, 'data')
+        this.TS = new Segment(Segment.DATA, 'data stack')
+        this.RS = new Segment(Segment.DATA, 'call stack')
 
-        this.FS = true // stop execution flag
+        // special registers
+        this.Q = 1 // frequency
+        this.Y = 0 // cycles counter
+
+        this.HALT = true // stop execution flag
 
         augment(this, st)
     }
@@ -58,7 +64,7 @@ class CPU {
     }
 
     next() {
-        if (this.FS) return
+        if (this.HALT) return
 
         this.Y ++
         const CS = this.CS
@@ -105,19 +111,19 @@ class CPU {
             case NOP:
             case RET:
             case HALT:
-                this.FS = true
+                this.HALT = true
                 break
 
             default:
                 log('found unknown op: ' + op)
-                this.FS = true
+                this.HALT = true
         }
     }
 
     exec(seg) {
         this.C = 0
         this.CS = seg
-        this.FS = false
+        this.HALT = false
     }
 
     call(name) {

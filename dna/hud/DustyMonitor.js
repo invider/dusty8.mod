@@ -29,28 +29,31 @@ class DustyMonitor extends dna.hud.Container {
             + ']')
         y += HR
 
-        prn('C:' + cpu.C)
-        prn('D:' + cpu.D)
-        prn('R:' + cpu.R)
-
-        y += HR
         prn('A:' + cpu.A)
         prn('B:' + cpu.B)
+
+        y += HR
+        prn('C:' + cpu.C)
+        prn('T:' + cpu.T)
+        prn('R:' + cpu.R)
+
 
         y += HR
         prn('Y:' + cpu.Y)
 
         x = 150 + B
         y = B + dy + HR
-        prn('CS:' + cpu.CS.id)
-        prn('DS:' + cpu.DS.id)
-        prn('RS:' + cpu.RS.id)
+
+        prn('X:' + cpu.X)
 
         y += HR
-        prn('I:' + cpu.I)
+        prn('CS:' + cpu.CS.id)
+        prn('DS:' + cpu.DS.id)
+        prn('TS:' + cpu.DS.id)
+        prn('RS:' + cpu.RS.id)
 
 
-        y += dy + HR
+        y += HR
         prn('Q:' + cpu.Q)
     }
 
