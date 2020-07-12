@@ -26,7 +26,7 @@ function setup() {
     const dustyMonitor = lab.hud.spawn(
         dna.hud.DustyMonitor, {
             x: 20,
-            y: 100,
+            y: 20,
             w: 300,
             h: 250,
             cpu: cpu,
@@ -36,9 +36,20 @@ function setup() {
     const coreMonitor = lab.hud.spawn(
         dna.hud.CoreMonitor, {
             x: 20,
-            y: 450,
+            y: 300,
             w: 450,
-            h: 300,
+            h: 250,
+            cpu: cpu,
+            capsule: capsule,
+        }
+    )
+
+    const coreMonitor2 = lab.hud.spawn(
+        dna.hud.CoreMonitor, {
+            x: 20,
+            y: 570,
+            w: 450,
+            h: 250,
             cpu: cpu,
             capsule: capsule,
         }
