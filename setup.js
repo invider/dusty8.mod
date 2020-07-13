@@ -37,7 +37,7 @@ function setup() {
         dna.hud.CoreMonitor, {
             x: 20,
             y: 290,
-            w: 450,
+            w: 400,
             h: 250,
             cpu: cpu,
             capsule: capsule,
@@ -48,7 +48,7 @@ function setup() {
         dna.hud.CoreMonitor, {
             x: 20,
             y: 560,
-            w: 450,
+            w: 400,
             h: 250,
             cpu: cpu,
             capsule: capsule,

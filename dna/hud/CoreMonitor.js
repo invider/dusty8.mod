@@ -106,8 +106,20 @@ class CoreMonitor extends dna.hud.Container {
         this.segmentId = this.capsule.segment.length - 1
     }
 
-    codeSegment() {
+    showCodeSegment() {
         this.segmentId = this.cpu.CS.id
+    }
+
+    showDataSegment() {
+        this.segmentId = this.cpu.DS.id
+    }
+
+    showDataStackSegment() {
+        this.segmentId = this.cpu.TS.id
+    }
+
+    showCallStackSegment() {
+        this.segmentId = this.cpu.RS.id
     }
 
     onKeyDown(e) {
@@ -127,7 +139,17 @@ class CoreMonitor extends dna.hud.Container {
                 break
             case 'Home': this.firstSegment(); break;
             case 'End': this.lastSegment(); break;
-            case 'Insert': this.codeSegment(); break;
+            case 'Insert':
+                if (this.segmentId === this.cpu.CS.id) {
+                    this.showDataSegment()
+                } else if (this.segmentId === this.cpu.DS.id) {
+                    this.showDataStackSegment()
+                } else if (this.segmentId === this.cpu.TS.id) {
+                    this.showCallStackSegment()
+                } else {
+                    this.showCodeSegment();
+                }
+                break;
         }
     }
 
