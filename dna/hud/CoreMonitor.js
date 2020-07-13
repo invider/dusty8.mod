@@ -7,6 +7,17 @@ class CoreMonitor extends dna.hud.Container {
         this.segmentId = 0
     }
 
+    getHighlight() {
+        if (this.segmentId === this.cpu.CS.id) {
+            return this.cpu.C
+        } else if (this.segmentId === this.cpu.TS.id) {
+            return this.cpu.T
+        } else if (this.segmentId === this.cpu.RS.id) {
+            return this.cpu.R
+        }
+        return -1
+    }
+
     drawData(seg) {
         const S = 8
         const bx = 10
@@ -14,11 +25,20 @@ class CoreMonitor extends dna.hud.Container {
         const dx = 50
         const dy = 25
 
+        const highlight = this.getHighlight()
+
         let p = 0
         for (let i = 0; i < S; i++) {
             for (let j = 0; j < S; j++) {
-                const v = seg.mem[i*S + j]
+                const shift = i*S + j
+                const v = seg.mem[shift]
                 const t = v? v : '.'
+
+                if (shift === highlight) {
+                    fill(env.style.highlight)
+                } else {
+                    fill(env.style.content)
+                }
                 text(t, bx + j*dx, by + i*dy)
             }
         }
